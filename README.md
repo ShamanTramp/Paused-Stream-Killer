@@ -36,16 +36,6 @@ Open **Dashboard → Plugins → Paused Stream Killer**:
 
 The pause timer starts when the plugin first observes the session in a paused state. If the server or plugin restarts while playback is paused, the timeout starts again when the plugin resumes monitoring.
 
-## Build and test locally
-
-```sh
-dotnet restore Jellyfin.Plugin.PausedStreamKiller.sln
-dotnet build Jellyfin.Plugin.PausedStreamKiller.sln -c Release --no-restore -m:1
-dotnet test Jellyfin.Plugin.PausedStreamKiller.sln -c Release --no-build --no-restore -m:1
-```
-
-The local test server used during development is Jellyfin 10.11.11 on `http://127.0.0.1:18096`.
-
 ## Compatibility
 
 Targets Jellyfin 10.11.11 and .NET 9.
