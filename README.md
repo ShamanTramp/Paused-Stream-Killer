@@ -2,39 +2,39 @@
 
 ![Paused Stream Killer illustration](assets/paused-stream-killer-cover.jpg)
 
-Paused Stream Killer is a Jellyfin plugin that automatically stops playback sessions that have remained paused beyond a configurable timeout. It helps release server resources while leaving ordinary active playback untouched.
+Paused Stream Killer is a Jellyfin plugin that stops playback after it has remained paused for a configurable amount of time.
 
 ## Features
 
-- Checks active Jellyfin playback sessions once per minute.
-- Uses a 30-minute pause timeout by default; the timeout can be changed in the plugin settings.
-- Monitors video playback by default, with optional support for audio-only sessions.
-- Can optionally include SyncPlay sessions. When enabled, only the paused client receives a stop command.
-- Resets its timer when playback resumes, the session disappears, or the server/plugin restarts.
-- Logs stop requests and errors.
+- Checks playback sessions once per minute and stops sessions that exceed the configured pause duration.
+- Defaults to a 30-minute pause limit and video playback only.
+- Can optionally include audio playback and SyncPlay sessions. Both options are disabled by default.
+- When SyncPlay is enabled, only the paused client session receives the stop command.
+- Starts tracking a paused session when the plugin starts or first observes it. A plugin or server restart therefore starts a new timeout for sessions already paused.
+- Logs stopped sessions and errors without logging authentication details.
 
 ## Installation
 
-In Jellyfin, open **Dashboard → Plugins → Repositories** and add this manifest:
+After a release is published, add this manifest in **Dashboard → Plugins → Repositories**:
 
 ```text
 https://raw.githubusercontent.com/ShamanTramp/Paused-Stream-Killer/main/manifest.json
 ```
 
-Save the repository, open the plugin catalog, and install **Paused Stream Killer**. Restart Jellyfin when the installation finishes. You can also download the package from [GitHub Releases](https://github.com/ShamanTramp/Paused-Stream-Killer/releases).
+Save the repository, open the plugin catalog, install **Paused Stream Killer**, then restart Jellyfin. Release packages are also available on [GitHub Releases](https://github.com/ShamanTramp/Paused-Stream-Killer/releases).
 
 ## Configuration
 
-Open **Dashboard → Plugins → Paused Stream Killer** to configure the plugin:
+Open **Dashboard → Plugins → Paused Stream Killer**:
 
-| Setting | Default | Description |
+| Option | Default | Description |
 | --- | --- | --- |
-| Automatic stopping | Enabled | Turns pause monitoring and stop requests on or off. |
-| Pause timeout | 30 minutes | Minimum pause duration before a stop request. The plugin checks sessions once per minute. |
-| Include audio playback | Disabled | Applies the timeout to audio-only playback. |
-| Include SyncPlay sessions | Disabled | Applies the timeout to SyncPlay sessions. Only the paused client is stopped. |
+| Automatic stopping | Enabled | Enables or disables monitoring and stop commands. |
+| Pause timeout | 30 minutes | Minimum time a session must remain paused before the plugin sends a stop command. The plugin checks once per minute. |
+| Include audio playback | Disabled | Applies the timeout to audio-only playback sessions. |
+| Include SyncPlay sessions | Disabled | Applies the timeout to SyncPlay sessions. When enabled, only the paused client receives a stop command. |
 
-The timer starts when the plugin first detects a session as paused. If Jellyfin or the plugin restarts while playback is paused, the timer starts again after monitoring resumes.
+The pause timer starts when the plugin first observes the session in a paused state. If the server or plugin restarts while playback is paused, the timeout starts again when the plugin resumes monitoring.
 
 ## Build and test locally
 
@@ -44,8 +44,13 @@ dotnet build Jellyfin.Plugin.PausedStreamKiller.sln -c Release --no-restore -m:1
 dotnet test Jellyfin.Plugin.PausedStreamKiller.sln -c Release --no-build --no-restore -m:1
 ```
 
-The plugin targets Jellyfin 10.11.11 and .NET 9. Its GitHub Actions workflows are manually triggered.
+The local test server used during development is Jellyfin 10.11.11 on `http://127.0.0.1:18096`.
+
+## Compatibility
+
+Targets Jellyfin 10.11.11 and .NET 9.
 
 ## License
 
-GPL-3.0-only. See [LICENSE](LICENSE).# Paused-Stream-Killer
+GPL-3.0-only. See [LICENSE](LICENSE).
+

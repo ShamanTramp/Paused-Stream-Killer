@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Paused Stream Killer</title>
+</head>
+<body>
+    <div id="PausedStreamKillerConfigPage" data-role="page" class="page type-interior pluginConfigurationPage" data-require="emby-input,emby-button,emby-checkbox">
+        <div data-role="content">
+            <div class="content-primary">
+                <form id="PausedStreamKillerConfigForm">
+                    <div class="checkboxContainer checkboxContainer-withDescription">
+                        <label class="emby-checkbox-label">
+                            <input id="EnableAutomaticStop" name="EnableAutomaticStop" type="checkbox" is="emby-checkbox" />
+                            <span>Arrêter automatiquement les lectures restées en pause</span>
+                        </label>
+                    </div>
+                    <div class="inputContainer">
+                        <label class="inputLabel inputLabelUnfocused" for="PauseTimeoutMinutes">Délai avant l’arrêt (minutes)</label>
+                        <input id="PauseTimeoutMinutes" name="PauseTimeoutMinutes" type="number" is="emby-input" min="1" max="1440" step="1" required />
+                        <div class="fieldDescription">Le contrôle des sessions s’effectue chaque minute. Délai par défaut : 30 minutes.</div>
+                    </div>
+                    <div class="checkboxContainer checkboxContainer-withDescription">
+                        <label class="emby-checkbox-label">
+                            <input id="IncludeAudioPlayback" name="IncludeAudioPlayback" type="checkbox" is="emby-checkbox" />
+                            <span>Inclure les lectures audio</span>
+                        </label>
+                        <div class="fieldDescription">Désactivé par défaut.</div>
+                    </div>
+                    <div class="checkboxContainer checkboxContainer-withDescription">
+                        <label class="emby-checkbox-label">
+                            <input id="IncludeSyncPlaySessions" name="IncludeSyncPlaySessions" type="checkbox" is="emby-checkbox" />
+                            <span>Inclure les sessions SyncPlay</span>
+                        </label>
+                        <div class="fieldDescription">Désactivé par défaut. Seul le client en pause sera arrêté.</div>
+                    </div>
+                    <div>
+                        <button is="emby-button" type="submit" class="raised button-submit block emby-button"><span>Enregistrer</span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <script type="text/javascript">
+            const PausedStreamKillerConfig = { pluginUniqueId: '2b3626af-525d-4be0-900e-c2c146b36f05' };
+            const configPage = document.querySelector('#PausedStreamKillerConfigPage');
+            configPage.addEventListener('pageshow', function () {
+                Dashboard.showLoadingMsg();
+                ApiClient.getPluginConfiguration(PausedStreamKillerConfig.pluginUniqueId).then(function (config) {
+                    document.querySelector('#EnableAutomaticStop').checked = config.EnableAutomaticStop !== false;
+                    document.querySelector('#PauseTimeoutMinutes').value = config.PauseTimeoutMinutes || 30;
+                    document.querySelector('#IncludeAudioPlayback').checked = config.IncludeAudioPlayback === true;
+                    document.querySelector('#IncludeSyncPlaySessions').checked = config.IncludeSyncPlaySessions === true;
+                    Dashboard.hideLoadingMsg();
+                });
+            });
+            document.querySelector('#PausedStreamKillerConfigForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+                Dashboard.showLoadingMsg();
+                ApiClient.getPluginConfiguration(PausedStreamKillerConfig.pluginUniqueId).then(function (config) {
+                    config.EnableAutomaticStop = document.querySelector('#EnableAutomaticStop').checked;
+                    config.PauseTimeoutMinutes = Math.min(1440, Math.max(1, Number(document.querySelector('#PauseTimeoutMinutes').value) || 30));
+                    config.IncludeAudioPlayback = document.querySelector('#IncludeAudioPlayback').checked;
+                    config.IncludeSyncPlaySessions = document.querySelector('#IncludeSyncPlaySessions').checked;
+                    ApiClient.updatePluginConfiguration(PausedStreamKillerConfig.pluginUniqueId, config).then(function (result) {
+                        Dashboard.processPluginConfigurationUpdateResult(result);
+                    });
+                });
+                return false;
+            });
+        </script>
+    </div>
+</body>
+</html>
+
