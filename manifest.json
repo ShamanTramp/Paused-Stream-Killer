@@ -12,7 +12,7 @@
         "version": "0.1.0.0",
         "changelog": "Initial release.",
         "targetAbi": "10.11.11.0",
-        "sourceUrl": "https://github.com/ShamanTramp/Paused-Stream-Killer/releases/download/v0.1.0.0/paused-stream-killer-0.1.0.0.zip",
+        "sourceUrl": "https://raw.githubusercontent.com/ShamanTramp/Paused-Stream-Killer/main/packages/paused-stream-killer-0.1.0.0.zip",
         "checksum": "4d7acabf23f2c0f3b1d550a8c4771a0d",
         "timestamp": "2026-10-11T09:15:48Z"
       }
