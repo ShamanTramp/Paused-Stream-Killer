@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <title>Paused Stream Killer</title>
@@ -12,30 +12,30 @@
                     <div class="checkboxContainer checkboxContainer-withDescription">
                         <label class="emby-checkbox-label">
                             <input id="EnableAutomaticStop" name="EnableAutomaticStop" type="checkbox" is="emby-checkbox" />
-                            <span>Arrêter automatiquement les lectures restées en pause</span>
+                            <span data-fr="Arrêter automatiquement les lectures restées en pause" data-en="Automatically stop playback that has been paused">Automatically stop playback that has been paused</span>
                         </label>
                     </div>
                     <div class="inputContainer">
-                        <label class="inputLabel inputLabelUnfocused" for="PauseTimeoutMinutes">Délai avant l’arrêt (minutes)</label>
+                        <label class="inputLabel inputLabelUnfocused" for="PauseTimeoutMinutes" data-fr="Délai avant l’arrêt (minutes)" data-en="Stop after (minutes)">Stop after (minutes)</label>
                         <input id="PauseTimeoutMinutes" name="PauseTimeoutMinutes" type="number" is="emby-input" min="1" max="1440" step="1" required />
-                        <div class="fieldDescription">Le contrôle des sessions s’effectue chaque minute. Délai par défaut : 30 minutes.</div>
+                        <div class="fieldDescription" data-fr="Le contrôle des sessions s’effectue chaque minute. Délai par défaut : 30 minutes." data-en="Sessions are checked every minute. Default timeout: 30 minutes.">Sessions are checked every minute. Default timeout: 30 minutes.</div>
                     </div>
                     <div class="checkboxContainer checkboxContainer-withDescription">
                         <label class="emby-checkbox-label">
                             <input id="IncludeAudioPlayback" name="IncludeAudioPlayback" type="checkbox" is="emby-checkbox" />
-                            <span>Inclure les lectures audio</span>
+                            <span data-fr="Inclure les lectures audio" data-en="Include audio playback">Include audio playback</span>
                         </label>
-                        <div class="fieldDescription">Désactivé par défaut.</div>
+                        <div class="fieldDescription" data-fr="Désactivé par défaut." data-en="Off by default.">Off by default.</div>
                     </div>
                     <div class="checkboxContainer checkboxContainer-withDescription">
                         <label class="emby-checkbox-label">
                             <input id="IncludeSyncPlaySessions" name="IncludeSyncPlaySessions" type="checkbox" is="emby-checkbox" />
-                            <span>Inclure les sessions SyncPlay</span>
+                            <span data-fr="Inclure les sessions SyncPlay" data-en="Include SyncPlay sessions">Include SyncPlay sessions</span>
                         </label>
-                        <div class="fieldDescription">Désactivé par défaut. Seul le client en pause sera arrêté.</div>
+                        <div class="fieldDescription" data-fr="Désactivé par défaut. Seul le client en pause sera arrêté." data-en="Off by default. Only the paused client will be stopped.">Off by default. Only the paused client will be stopped.</div>
                     </div>
                     <div>
-                        <button is="emby-button" type="submit" class="raised button-submit block emby-button"><span>Enregistrer</span></button>
+                        <button is="emby-button" type="submit" class="raised button-submit block emby-button"><span data-fr="Enregistrer" data-en="Save">Save</span></button>
                     </div>
                 </form>
             </div>
@@ -43,6 +43,17 @@
         <script type="text/javascript">
             const PausedStreamKillerConfig = { pluginUniqueId: '2b3626af-525d-4be0-900e-c2c146b36f05' };
             const configPage = document.querySelector('#PausedStreamKillerConfigPage');
+            const jellyfinCulture = window.globalize && window.globalize.currentCulture;
+            const cultureCode = typeof jellyfinCulture === 'string'
+                ? jellyfinCulture
+                : jellyfinCulture && jellyfinCulture.name
+                    ? jellyfinCulture.name
+                    : document.documentElement.lang || navigator.language || 'en';
+            const language = cultureCode.toLowerCase().startsWith('fr') ? 'fr' : 'en';
+            configPage.lang = language;
+            configPage.querySelectorAll('[data-en][data-fr]').forEach(function (element) {
+                element.textContent = element.dataset[language];
+            });
             configPage.addEventListener('pageshow', function () {
                 Dashboard.showLoadingMsg();
                 ApiClient.getPluginConfiguration(PausedStreamKillerConfig.pluginUniqueId).then(function (config) {
