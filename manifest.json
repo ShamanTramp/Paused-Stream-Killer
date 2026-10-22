@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/ShamanTramp/Paused-Stream-Killer/main/assets/paused-stream-killer-cover.jpg",
     "versions": [
       {
+        "version": "0.1.1.0",
+        "changelog": "Use Jellyfin's selected display language for the configuration page, with English fallback.",
+        "targetAbi": "10.11.11.0",
+        "sourceUrl": "https://raw.githubusercontent.com/ShamanTramp/Paused-Stream-Killer/main/packages/paused-stream-killer-0.1.1.0.zip",
+        "checksum": "43df86901700396c5aed9fd92aa2024e",
+        "timestamp": "2026-10-22T14:44:10Z"
+      },
+      {
         "version": "0.1.0.0",
         "changelog": "Initial release.",
         "targetAbi": "10.11.11.0",
@@ -19,4 +27,3 @@
     ]
   }
 ]
-

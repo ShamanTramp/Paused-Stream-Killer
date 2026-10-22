@@ -21,7 +21,7 @@ After a release is published, add this manifest in **Dashboard → Plugins → R
 https://raw.githubusercontent.com/ShamanTramp/Paused-Stream-Killer/main/manifest.json
 ```
 
-Save the repository, open the plugin catalog, install **Paused Stream Killer**, then restart Jellyfin. The [0.1.0.0 plugin package](https://raw.githubusercontent.com/ShamanTramp/Paused-Stream-Killer/main/packages/paused-stream-killer-0.1.0.0.zip) is also available directly.
+Save the repository, open the plugin catalog, install **Paused Stream Killer**, then restart Jellyfin. The [0.1.1.0 plugin package](https://raw.githubusercontent.com/ShamanTramp/Paused-Stream-Killer/main/packages/paused-stream-killer-0.1.1.0.zip) is also available directly.
 
 ## Configuration
 
